@@ -1,11 +1,11 @@
+import 'package:burns_depression_test/Controllers/QuestionSource.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Quizzler());
+void main() => runApp(DepressionTest());
 
-class Quizzler extends StatelessWidget {
+class DepressionTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
@@ -25,123 +25,69 @@ class QuizPage extends StatefulWidget {
   _QuizPageState createState() => _QuizPageState();
 }
 
-
-
 class _QuizPageState extends State<QuizPage> {
+  String questionText = "Soru";
+  QuestionSource src = QuestionSource();
+
   @override
   Widget build(BuildContext context) {
+    questionText = src.getQuestion();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        Expanded(
-          flex: 5,
-          child: Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Center(
-              child: Text(
-                ' Soru ',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              textColor: Colors.white,
-              color: Colors.green,
-              child: Text(
-                'True',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
-              ),
-              onPressed: () {
-                //The user picked true.
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                //The user picked false.
-              },
-            ),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                //The user picked false.
-              },
-            ),
-          ),
-        ),Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                //The user picked false.
-              },
-            ),
-          ),
-        ),Expanded(
-          child: Padding(
-            padding: EdgeInsets.all(15.0),
-            child: FlatButton(
-              color: Colors.red,
-              child: Text(
-                'False',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                //The user picked false.
-              },
-            ),
-          ),
-        ),
+      children: createButtons(),
         //TODO: Add a Row here as your score keeper
-      ],
+
     );
   }
-}
 
+  List<Widget> createButtons() {
+    List<Widget> list = List();
+   List<ColorSwatch<int>> colors=[Colors.orangeAccent,Colors.orange,Colors.deepOrangeAccent,Colors.deepOrange,Colors.redAccent,Colors.red];
+   List<String> texts=["Hiç","Biraz","Orta Derecede","Çok Fazla","Aşırı Derecede"];
+    list.add( Expanded(
+      flex: 4,
+      child: Padding(
+        padding: EdgeInsets.all(5.0),
+        child: Center(
+          child: Text(
+            questionText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 25.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    ),);
+
+    for (int i = 0; i < 5; i++) {
+      list.add(Expanded(
+        child: Padding(
+          padding: EdgeInsets.all(5.0),
+          child: FlatButton(
+            textColor: Colors.white,
+            color: colors[i],
+            child: Text(
+              texts[i],
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+              ),
+            ),
+            onPressed: () {
+              setState(() {
+                src.setScore(i);
+                questionText=src.getQuestion();
+              });
+
+            },
+          ),
+        ),
+      ));
+    }
+    return list;
+  }
+}
